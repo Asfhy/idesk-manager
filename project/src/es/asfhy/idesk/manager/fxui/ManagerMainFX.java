@@ -58,6 +58,7 @@ public class ManagerMainFX extends Application {
 	private Label							deskFntCol	= new Label(ManagerMain.bundle.getString("main.desktop.preview"));
 	private Label							toolFntCol	= new Label(ManagerMain.bundle.getString("main.tooltip.preview"));
 	private final TabPane					tabs		= new TabPane();
+	public PreviewPane						preview;
 	
 	private synchronized void updateDeskFntCol() {
 		String style = ManagerMain.getFontStyle(cfg.getConfigTable().getFontColor(), cfg.getConfigTable().getBackgroundColor(), cfg.getConfigTable().getFontName(), cfg.getConfigTable().getFontSize(), cfg.getConfigTable().isFontBold());
@@ -83,8 +84,11 @@ public class ManagerMainFX extends Application {
 		//
 		Scene scene = new Scene(root, 1024, 768);
 		//
-		Tab tab0 = new Tab("Pre", new PreviewPane(this));
+		preview = new PreviewPane(this);
+		Tab tab0 = new Tab(ManagerMain.bundle.getString("main.tabs.preview"), preview);
 		tab0.setClosable(false);
+		root.widthProperty().addListener(preview.updateSize);
+		root.heightProperty().addListener(preview.updateSize);
 		tabs.getTabs().add(tab0);
 		//
 		Tab tab1 = new Tab(ManagerMain.bundle.getString("main.tabs.config"), createDeskPanel());
@@ -111,8 +115,7 @@ public class ManagerMainFX extends Application {
 		//
 		stage.setScene(scene);
 		stage.show();
-		// stage.setResizable(false);
-		// stage.setMaximized(true);
+		stage.requestFocus();
 	}
 	
 	private Node createDeskPanel() {

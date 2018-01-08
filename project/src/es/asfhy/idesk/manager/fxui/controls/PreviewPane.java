@@ -9,6 +9,7 @@ import es.asfhy.idesk.manager.objects.DesktopIcon;
 import es.asfhy.idesk.manager.tables.Config;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -22,38 +23,38 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 
 public class PreviewPane extends BorderPane {
-	private final ManagerMainFX	parent;
-	private final Config		cfg;
-	private final Canvas		canvas;
-	private double				div	= 2;
+	private final ManagerMainFX			parent;
+	private final Config				cfg;
+	private final Canvas				canvas;
+	public final ChangeListener<Number>	updateSize	= new ChangeListener<Number>() {
+														@Override
+														public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+															Rectangle2D rec = Screen.getPrimary().getVisualBounds();
+															Bounds b = getBoundsInLocal();
+															if (getParent() != null)
+																b = getParent().getBoundsInLocal();
+															double mul = Math.min(b.getWidth() / rec.getWidth(), b.getHeight() / rec.getHeight());
+															canvas.setWidth(mul * rec.getWidth());
+															canvas.setHeight(mul * rec.getHeight());
+															updateView();
+														}
+													};
 	
 	public PreviewPane(ManagerMainFX main) {
 		super();
-		ChangeListener<Number> cl = new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				Rectangle2D rec = Screen.getPrimary().getVisualBounds();
-				if (getScene() != null) {
-					double mul = Math.min(getScene().getWidth() / rec.getWidth(), getScene().getHeight() / rec.getHeight());
-					canvas.setWidth(mul * rec.getWidth());
-					canvas.setHeight(mul * rec.getHeight());
-					updateView();
-				}
-			}
-		};
-		widthProperty().addListener(cl);
-		heightProperty().addListener(cl);
-		setCenter(canvas = new Canvas(1920 / 2, 1200 / 2));
+		canvas = new Canvas();
+		canvas.setCache(false);
 		parent = main;
 		cfg = parent.cfg.getConfigTable();
-		updateView();
+		setCenter(canvas);
+		widthProperty().addListener(updateSize);
+		heightProperty().addListener(updateSize);
+		updateSize.changed(null, null, null);
 	}
 	
-	private synchronized void updateView() {
+	public synchronized void updateView() {
 		Rectangle2D rec = Screen.getPrimary().getVisualBounds();
-		div = Math.max(rec.getWidth() / getWidth(), rec.getHeight() / getHeight());
-		System.out.println(rec);
-		System.out.println(div);
+		double div = Math.max(rec.getWidth() / getWidth(), rec.getHeight() / getHeight());
 		Image img = null;
 		if (cfg.getBackgroundSource() != null && cfg.getBackgroundSource().trim().length() != 0 && cfg.getBackgroundDelay() > 0) {
 			File src = new File(cfg.getBackgroundSource());
@@ -101,8 +102,10 @@ public class PreviewPane extends BorderPane {
 					y = (canvas.getHeight() - h) / 2d;
 					break;
 				case Mirror:
+					// FIXME: Saber qué significa este valor e implementarlo.
 					break;
 				case Scale:
+					// FIXME: Saber qué significa este valor e implementarlo.
 					break;
 				case Stretch:
 					// Nothing to do, current values are for Stretch Mode, as it the default value.
@@ -112,7 +115,6 @@ public class PreviewPane extends BorderPane {
 					break;
 			}
 			g.drawImage(img, x, y, w, h);
-			
 		}
 		//
 		for (DesktopIcon di : parent.icons) {
