@@ -1,7 +1,6 @@
 package es.asfhy.idesk.manager.fxui.controls;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import es.asfhy.idesk.manager.ManagerMain;
 import es.asfhy.idesk.manager.fxui.ManagerMainFX;
@@ -15,8 +14,10 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -55,6 +56,8 @@ public class PreviewPane extends BorderPane {
 	public synchronized void updateView() {
 		Rectangle2D rec = Screen.getPrimary().getVisualBounds();
 		double div = Math.max(rec.getWidth() / getWidth(), rec.getHeight() / getHeight());
+		if (div == Double.POSITIVE_INFINITY)
+			return;
 		Image img = null;
 		if (cfg.getBackgroundSource() != null && cfg.getBackgroundSource().trim().length() != 0 && cfg.getBackgroundDelay() > 0) {
 			File src = new File(cfg.getBackgroundSource());
@@ -64,7 +67,7 @@ public class PreviewPane extends BorderPane {
 					String fn = f.getName().toLowerCase();
 					if (fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png") || fn.endsWith(".gif")) {
 						try {
-							img = new Image(new FileInputStream(f));
+							img = new Image(f.getAbsoluteFile().toURI().toString());
 							break;
 						} catch (Exception e) {
 						}
@@ -76,7 +79,7 @@ public class PreviewPane extends BorderPane {
 			String fn = f.getName().toLowerCase();
 			if (fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png") || fn.endsWith(".gif")) {
 				try {
-					img = new Image(new FileInputStream(f));
+					img = new Image(f.getAbsoluteFile().toURI().toString());
 				} catch (Exception e) {
 				}
 			}
@@ -93,6 +96,7 @@ public class PreviewPane extends BorderPane {
 					h = img.getHeight() / div;
 					x = (canvas.getWidth() - w) / 2d;
 					y = (canvas.getHeight() - h) / 2d;
+					g.drawImage(img, x, y, w, h);
 					break;
 				case Fit:
 					double aux = Math.min(canvas.getWidth() / img.getWidth(), canvas.getHeight() / img.getHeight());
@@ -100,21 +104,40 @@ public class PreviewPane extends BorderPane {
 					h = img.getHeight() * aux;
 					x = (canvas.getWidth() - w) / 2d;
 					y = (canvas.getHeight() - h) / 2d;
+					g.drawImage(img, x, y, w, h);
 					break;
 				case Mirror:
-					// FIXME: Saber qué significa este valor e implementarlo.
+					while (w == 0 || h == 0) {
+						w = img.getWidth() / div;
+						h = img.getHeight() / div;
+					}
+					WritableImage im = new WritableImage((int) Math.round(w * 2), (int) Math.round(h * 2));
+					for (int ix = 0; ix < img.getWidth(); ix++) {
+						for (int iy = 0; iy < img.getHeight(); iy++) {
+							int argb = img.getPixelReader().getArgb(ix, iy);
+							im.getPixelWriter().setArgb(ix, iy, argb);
+							im.getPixelWriter().setArgb((int) (im.getWidth() - ix - 1), iy, argb);
+							im.getPixelWriter().setArgb(ix, (int) (im.getHeight() - iy - 1), argb);
+							im.getPixelWriter().setArgb((int) (im.getWidth() - ix - 1), (int) (im.getHeight() - iy - 1), argb);
+						}
+					}
+					// Create a Mosaic Paint with Texture Mirrored on Each Axis.
+					ImagePattern ip1 = new ImagePattern(im, 0, 0, w * 2, h * 2, false);
+					g.setFill(ip1);
+					g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 					break;
 				case Scale:
-					// FIXME: Saber qué significa este valor e implementarlo.
+					g.drawImage(img, x, y, w, h);
 					break;
 				case Stretch:
-					// Nothing to do, current values are for Stretch Mode, as it the default value.
-					break;
 				default:
-					// Nothing to do, current values are for Stretch Mode, as it the default value.
+					w = img.getWidth() / div;
+					h = img.getHeight() / div;
+					ImagePattern ip = new ImagePattern(img, 0, 0, w, h, false);
+					g.setFill(ip);
+					g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 					break;
 			}
-			g.drawImage(img, x, y, w, h);
 		}
 		//
 		for (DesktopIcon di : parent.icons) {
