@@ -1,4 +1,5 @@
 # iDesk Manager
+## About iDeks Manager
 iDesk Manager is a Java project intended to ease the task of configuring iDesk desktop manager. iDesk is a light desktop manager for Lightweight Window Managers like OpenBox and IceWM.
 
 The UI is designed with JavaFX, as it seems Swing may be getting deprecated someday.
