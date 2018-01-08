@@ -93,7 +93,7 @@ public class Config {
 	private String			fontName				= "Arial";
 	private boolean			fontBold				= true;
 	private int				fontSize				= 16;
-	private Color			fontColor				= Color.white;
+	private Color			fontColor				= Color.black;
 	private CursorOver		cursorOver				= CursorOver.DEFAULT;
 	private int				transparency			= 0;
 	private boolean			captionOnHover			= false;
@@ -117,7 +117,7 @@ public class Config {
 	private String			backgroundSource		= null;
 	private int				backgroundDelay			= 0;
 	private Color			backgroundColor			= Color.white;
-	private BackgroundMode	backgroundMode			= BackgroundMode.Fit;
+	private BackgroundMode	backgroundMode			= BackgroundMode.Stretch;
 	
 	public synchronized String getTableString() {
 		StringBuilder out = new StringBuilder("table Config\n");

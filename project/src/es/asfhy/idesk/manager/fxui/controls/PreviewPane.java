@@ -11,7 +11,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -81,10 +80,12 @@ public class PreviewPane extends BorderPane {
 				}
 			}
 		}
+		GraphicsContext g = canvas.getGraphicsContext2D();
+		g.clearRect(-5, -5, canvas.getWidth() + 10, canvas.getHeight() + 10);
+		g.setFill(ManagerMain.cast(cfg.getBackgroundColor()));
+		g.fillRect(-5, -5, canvas.getWidth() + 10, canvas.getHeight() + 10);
+		double x = 0, y = 0, w = canvas.getWidth(), h = canvas.getHeight();
 		if (img != null) {
-			GraphicsContext g = canvas.getGraphicsContext2D();
-			g.clearRect(-5, -5, canvas.getWidth() + 10, canvas.getHeight() + 10);
-			double x = 0, y = 0, w = canvas.getWidth(), h = canvas.getHeight();
 			switch (cfg.getBackgroundMode()) {
 				case Center:
 					w = img.getWidth() / div;
@@ -111,66 +112,66 @@ public class PreviewPane extends BorderPane {
 					break;
 			}
 			g.drawImage(img, x, y, w, h);
-			//
-			for (DesktopIcon di : parent.icons) {
-				Image ico = null;
-				try {
-					// Dibujar el Icono:
-					ico = new Image("file://" + di.getIcon());
-					x = di.getX() == null ? 0 : di.getX() / div;
-					y = di.getY() == null ? 0 : di.getY() / div;
-					w = di.getWidth() == null ? ico.getWidth() / div : di.getWidth() / div;
-					h = di.getHeight() == null ? ico.getHeight() / div : di.getHeight() / div;
-					g.drawImage(ico, x, y, w, h);
-					// Dibujar el Titlo del Icono, si por defecto se muestran:
-					if (!cfg.isCaptionOnHover()) {
-						// Creamos la fuente:
-						Font fnt = Font.font(cfg.getFontName(), cfg.isFontBold() ? FontWeight.BOLD : FontWeight.NORMAL, (Screen.getPrimary().getDpi() / 72d) * (cfg.getFontSize() / div));
-						// Usamos la configuración para calcular la posición:
-						double tx = 0, ty = 0;
-						TextAlignment ta = null;
-						VPos tb = null;
-						switch (cfg.getCaptionPlacement()) {
-							case Bottom:
-								tx = (x + w / 2d);
-								ty = y + h;
-								ta = TextAlignment.CENTER;
-								tb = VPos.TOP;
-								break;
-							case Left:
-								tx = x;
-								ty = (y + h / 2d);
-								ta = TextAlignment.RIGHT;
-								tb = VPos.CENTER;
-								break;
-							case Right:
-								tx = x + w;
-								ty = (y + h / 2d);
-								ta = TextAlignment.LEFT;
-								tb = VPos.CENTER;
-								break;
-							case Top:
-								tx = (x + w / 2d);
-								ty = y;
-								ta = TextAlignment.CENTER;
-								tb = VPos.TOP;
-								break;
-							default:
-								break;
-						}
-						// Con todos los cálculos hechos, dibujamos el texto donde corresponde:
-						g.setFont(fnt);
-						g.setTextBaseline(tb);
-						g.setTextAlign(ta);
-						g.setFill(ManagerMain.cast(cfg.getFontColor()));
-						g.fillText(di.getCaption(), tx, ty);
-					}
-				} catch (Exception e) {
-				}
-			}
-			// TODO: Utilizar la imagen cargada para configurar una vista previa del escritorio.
-			g.setStroke(Color.BLACK);
-			g.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
+			
 		}
+		//
+		for (DesktopIcon di : parent.icons) {
+			Image ico = null;
+			try {
+				// Dibujar el Icono:
+				ico = new Image("file://" + di.getIcon());
+				x = di.getX() == null ? 0 : di.getX() / div;
+				y = di.getY() == null ? 0 : di.getY() / div;
+				w = di.getWidth() == null ? ico.getWidth() / div : di.getWidth() / div;
+				h = di.getHeight() == null ? ico.getHeight() / div : di.getHeight() / div;
+				g.drawImage(ico, x, y, w, h);
+				// Dibujar el Titlo del Icono, si por defecto se muestran:
+				if (!cfg.isCaptionOnHover()) {
+					// Creamos la fuente:
+					Font fnt = Font.font(cfg.getFontName(), cfg.isFontBold() ? FontWeight.BOLD : FontWeight.NORMAL, (Screen.getPrimary().getDpi() / 72d) * (cfg.getFontSize() / div));
+					// Usamos la configuración para calcular la posición:
+					double tx = 0, ty = 0;
+					TextAlignment ta = null;
+					VPos tb = null;
+					switch (cfg.getCaptionPlacement()) {
+						case Bottom:
+							tx = (x + w / 2d);
+							ty = y + h;
+							ta = TextAlignment.CENTER;
+							tb = VPos.TOP;
+							break;
+						case Left:
+							tx = x;
+							ty = (y + h / 2d);
+							ta = TextAlignment.RIGHT;
+							tb = VPos.CENTER;
+							break;
+						case Right:
+							tx = x + w;
+							ty = (y + h / 2d);
+							ta = TextAlignment.LEFT;
+							tb = VPos.CENTER;
+							break;
+						case Top:
+							tx = (x + w / 2d);
+							ty = y;
+							ta = TextAlignment.CENTER;
+							tb = VPos.TOP;
+							break;
+						default:
+							break;
+					}
+					// Con todos los cálculos hechos, dibujamos el texto donde corresponde:
+					g.setFont(fnt);
+					g.setTextBaseline(tb);
+					g.setTextAlign(ta);
+					g.setFill(ManagerMain.cast(cfg.getFontColor()));
+					g.fillText(di.getCaption(), tx, ty);
+				}
+			} catch (Exception e) {
+			}
+		}
+		g.setStroke(Color.BLACK);
+		g.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
 }

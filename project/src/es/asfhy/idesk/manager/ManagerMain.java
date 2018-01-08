@@ -4,6 +4,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +14,7 @@ import java.util.ResourceBundle;
 import javax.swing.JLabel;
 
 import es.asfhy.idesk.manager.fxui.ManagerMainFX;
+import es.asfhy.idesk.manager.objects.MainConfigFile;
 import javafx.application.Application;
 
 public class ManagerMain {
@@ -93,6 +96,14 @@ public class ManagerMain {
 	}
 	
 	public static void main(String args[]) {
+		if (!ideskrc.exists())
+			try {
+				new MainConfigFile().save();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		Application.launch(ManagerMainFX.class, args);
 	}
 }
