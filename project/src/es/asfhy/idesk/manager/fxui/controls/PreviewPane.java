@@ -14,7 +14,6 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -107,22 +106,17 @@ public class PreviewPane extends BorderPane {
 					g.drawImage(img, x, y, w, h);
 					break;
 				case Mirror:
-					while (w == 0 || h == 0) {
-						w = img.getWidth() / div;
-						h = img.getHeight() / div;
-					}
-					WritableImage im = new WritableImage((int) Math.round(w * 2), (int) Math.round(h * 2));
-					for (int ix = 0; ix < img.getWidth(); ix++) {
-						for (int iy = 0; iy < img.getHeight(); iy++) {
-							int argb = img.getPixelReader().getArgb(ix, iy);
-							im.getPixelWriter().setArgb(ix, iy, argb);
-							im.getPixelWriter().setArgb((int) (im.getWidth() - ix - 1), iy, argb);
-							im.getPixelWriter().setArgb(ix, (int) (im.getHeight() - iy - 1), argb);
-							im.getPixelWriter().setArgb((int) (im.getWidth() - ix - 1), (int) (im.getHeight() - iy - 1), argb);
-						}
-					}
-					// Create a Mosaic Paint with Texture Mirrored on Each Axis.
-					ImagePattern ip1 = new ImagePattern(im, 0, 0, w * 2, h * 2, false);
+					w = img.getWidth() / div;
+					h = img.getHeight() / div;
+					int imw = (int) w * 2;
+					int imh = (int) h * 2;
+					Canvas cnv = new Canvas(imw, imh);
+					GraphicsContext g2 = cnv.getGraphicsContext2D();
+					g2.drawImage(img, 0, 0, w, h);
+					g2.drawImage(img, cnv.getWidth(), 0, -w, h);
+					g2.drawImage(img, 0, cnv.getHeight(), w, -h);
+					g2.drawImage(img, cnv.getWidth(), cnv.getHeight(), -w, -h);
+					ImagePattern ip1 = new ImagePattern(cnv.snapshot(null, null), 0, 0, imw, imh, false);
 					g.setFill(ip1);
 					g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 					break;
