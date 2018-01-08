@@ -79,6 +79,10 @@ public class ManagerMainFX extends Application {
 			for (File f : files)
 				icons.add(new DesktopIcon(f.getName()));
 		//
+		BorderPane root = new BorderPane();
+		//
+		Scene scene = new Scene(root, 1024, 768);
+		//
 		Tab tab0 = new Tab("Pre", new PreviewPane(this));
 		tab0.setClosable(false);
 		tabs.getTabs().add(tab0);
@@ -97,8 +101,7 @@ public class ManagerMainFX extends Application {
 			t.setClosable(false);
 			tabs.getTabs().add(t);
 		}
-		//
-		BorderPane root = new BorderPane(tabs);
+		root.setCenter(tabs);
 		root.setTop(createToolbar());
 		//
 		updateDeskFntCol();
@@ -106,7 +109,7 @@ public class ManagerMainFX extends Application {
 		//
 		stage.setTitle(ManagerMain.bundle.getString("main.title"));
 		//
-		stage.setScene(new Scene(root, 1024, 768));
+		stage.setScene(scene);
 		stage.show();
 		// stage.setResizable(false);
 		// stage.setMaximized(true);
