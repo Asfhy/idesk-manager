@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Optional;
 
 import es.asfhy.idesk.manager.ManagerMain;
+import es.asfhy.idesk.manager.fxui.ManagerMainFX;
 import es.asfhy.idesk.manager.objects.DesktopIcon;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,19 +34,21 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class DeskIconPane extends BorderPane {
+	private final ManagerMainFX	parentMain;
 	private Tab					parentTab;
 	private final DesktopIcon	ico;
 	private final TitledPane	viewPane;
 	private final ImageView		view;
 	private final FileChooser	chooser;
 	
-	public DeskIconPane(Tab parnet, String fileName) {
-		this(parnet, DesktopIcon.create(fileName));
+	public DeskIconPane(ManagerMainFX main, Tab parent, String fileName) {
+		this(main, parent, DesktopIcon.create(fileName));
 	}
 	
-	public DeskIconPane(Tab parnet, DesktopIcon icon) {
+	public DeskIconPane(ManagerMainFX main, Tab parent, DesktopIcon icon) {
 		super();
-		parentTab = parnet;
+		parentMain = main;
+		parentTab = parent;
 		ico = icon;
 		chooser = new FileChooser();
 		chooser.setTitle(ManagerMain.bundle.getString("deskpane.icon.chooserTitle"));
@@ -93,6 +96,7 @@ public class DeskIconPane extends BorderPane {
 			public void handle(ActionEvent event) {
 				try {
 					ico.save();
+					parentMain.preview.updateView();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -293,6 +297,7 @@ public class DeskIconPane extends BorderPane {
 			}
 		}
 		view.setImage(im);
+		parentMain.preview.updateView();
 	}
 	
 	public synchronized DesktopIcon getIcon() {

@@ -104,6 +104,7 @@ public class ManagerMain {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		Locale.setDefault(bundle.getLocale());
 		Application.launch(ManagerMainFX.class, args);
 	}
 }

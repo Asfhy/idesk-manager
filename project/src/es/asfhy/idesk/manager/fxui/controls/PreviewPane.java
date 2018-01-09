@@ -143,6 +143,7 @@ public class PreviewPane extends BorderPane {
 				y = di.getY() == null ? 0 : di.getY() / div;
 				w = di.getWidth() == null ? ico.getWidth() / div : di.getWidth() / div;
 				h = di.getHeight() == null ? ico.getHeight() / div : di.getHeight() / div;
+				// FIXME: Transparency Setting is Ignored, and it must be respected.
 				g.drawImage(ico, x, y, w, h);
 				// Dibujar el Titlo del Icono, si por defecto se muestran:
 				if (!cfg.isCaptionOnHover()) {
@@ -175,7 +176,7 @@ public class PreviewPane extends BorderPane {
 							tx = (x + w / 2d);
 							ty = y;
 							ta = TextAlignment.CENTER;
-							tb = VPos.TOP;
+							tb = VPos.BOTTOM;
 							break;
 						default:
 							break;
