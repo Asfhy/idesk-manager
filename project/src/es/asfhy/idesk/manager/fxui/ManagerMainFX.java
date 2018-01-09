@@ -264,7 +264,7 @@ public class ManagerMainFX extends Application {
 		});
 		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.desktop.captionPos")), captionPlacement));
 		//
-		Spinner<Integer> transparency = new Spinner<Integer>(0, 100, cfg.getConfigTable().getTransparency());
+		Spinner<Integer> transparency = new Spinner<Integer>(0, 255, cfg.getConfigTable().getTransparency());
 		transparency.valueProperty().addListener(new ChangeListener<Integer>() {
 			@Override
 			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
@@ -424,6 +424,7 @@ public class ManagerMainFX extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				cfg.getConfigTable().setUseShadow(shadowEnabled.isSelected());
+				preview.updateView();
 			}
 		});
 		content.getChildren().add(shadowEnabled);
@@ -435,6 +436,7 @@ public class ManagerMainFX extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				cfg.getConfigTable().setShadowColor(ManagerMain.cast(shadowPick.getValue()));
+				preview.updateView();
 			}
 		});
 		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.shadow.color")), shadowPick));
@@ -444,6 +446,7 @@ public class ManagerMainFX extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
 				cfg.getConfigTable().setShadowX(new_val);
+				preview.updateView();
 			}
 		});
 		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.shadow.x")), shadowX));
@@ -453,6 +456,7 @@ public class ManagerMainFX extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
 				cfg.getConfigTable().setShadowY(new_val);
+				preview.updateView();
 			}
 		});
 		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.shadow.y")), shadowY));

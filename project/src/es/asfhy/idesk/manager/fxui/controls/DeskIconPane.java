@@ -63,7 +63,13 @@ public class DeskIconPane extends BorderPane {
 			@Override
 			public void handle(MouseEvent evt) {
 				if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 2) {
-					File out = chooser.showOpenDialog(getScene().getWindow());
+					File out = null;
+					if (ico.getIcon() != null && ico.getIcon().trim().length() != 0) {
+						out = new File(ico.getIcon().trim());
+						if (out.exists() && out.isFile())
+							chooser.setInitialDirectory(out.getParentFile());
+					}
+					out = chooser.showOpenDialog(getScene().getWindow());
 					if (out != null) {
 						ico.setIcon(out.getAbsolutePath());
 						updateImage();
@@ -122,6 +128,7 @@ public class DeskIconPane extends BorderPane {
 					if (done) {
 						parentTab.getTabPane().getTabs().remove(parentTab);
 						parentTab = null;
+						parentMain.icons.remove(ico);
 					}
 				}
 			}

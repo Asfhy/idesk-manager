@@ -137,19 +137,21 @@ public class PreviewPane extends BorderPane {
 		for (DesktopIcon di : parent.icons) {
 			Image ico = null;
 			try {
-				// Dibujar el Icono:
+				// Draw Desktop Icon Image:
 				ico = new Image("file://" + di.getIcon());
 				x = di.getX() == null ? 0 : di.getX() / div;
 				y = di.getY() == null ? 0 : di.getY() / div;
 				w = di.getWidth() == null ? ico.getWidth() / div : di.getWidth() / div;
 				h = di.getHeight() == null ? ico.getHeight() / div : di.getHeight() / div;
-				// FIXME: Transparency Setting is Ignored, and it must be respected.
+				g.save();
+				g.setGlobalAlpha(1d - (cfg.getTransparency() / 255d));
 				g.drawImage(ico, x, y, w, h);
-				// Dibujar el Titlo del Icono, si por defecto se muestran:
+				g.restore();
+				// Draw Desktop Icon Name, if it's enabled.
 				if (!cfg.isCaptionOnHover()) {
-					// Creamos la fuente:
+					// Create the Font Object:
 					Font fnt = Font.font(cfg.getFontName(), cfg.isFontBold() ? FontWeight.BOLD : FontWeight.NORMAL, (Screen.getPrimary().getDpi() / 72d) * (cfg.getFontSize() / div));
-					// Usamos la configuración para calcular la posición:
+					// Use the Location Setting to Find text Position and Alignment:
 					double tx = 0, ty = 0;
 					TextAlignment ta = null;
 					VPos tb = null;
@@ -181,10 +183,16 @@ public class PreviewPane extends BorderPane {
 						default:
 							break;
 					}
-					// Con todos los cálculos hechos, dibujamos el texto donde corresponde:
+					// Draw the Text where it should be:
 					g.setFont(fnt);
 					g.setTextBaseline(tb);
 					g.setTextAlign(ta);
+					if (cfg.isUseShadow()) {
+						double x2 = tx + cfg.getShadowX() / div;
+						double y2 = ty + cfg.getShadowY() / div;
+						g.setFill(ManagerMain.cast(cfg.getShadowColor()));
+						g.fillText(di.getCaption(), x2, y2);
+					}
 					g.setFill(ManagerMain.cast(cfg.getFontColor()));
 					g.fillText(di.getCaption(), tx, ty);
 				}
