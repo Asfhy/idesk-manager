@@ -6,6 +6,7 @@ import java.util.Optional;
 import es.asfhy.idesk.manager.ManagerMain;
 import es.asfhy.idesk.manager.fxui.ManagerMainFX;
 import es.asfhy.idesk.manager.objects.DesktopIcon;
+import es.asfhy.idesk.manager.rsrc.langs.Strings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -51,10 +52,10 @@ public class DeskIconPane extends BorderPane {
 		parentTab = parent;
 		ico = icon;
 		chooser = new FileChooser();
-		chooser.setTitle(ManagerMain.bundle.getString("deskpane.icon.chooserTitle"));
+		chooser.setTitle(Strings.getString("deskpane.icon.chooserTitle", "Select Image to Use as Icon:"));
 		chooser.getExtensionFilters().clear();
-		chooser.getExtensionFilters().add(new ExtensionFilter(ManagerMain.bundle.getString("deskpane.icon.chooserFilter"), "*.png", "*.gif", "*.jpg", "*.jpeg"));
-		viewPane = new TitledPane(ManagerMain.bundle.getString("deskpane.icon.title"), view = new ImageView());
+		chooser.getExtensionFilters().add(new ExtensionFilter(Strings.getString("deskpane.icon.chooserFilter", "All Supported Image Formats"), "*.png", "*.gif", "*.jpg", "*.jpeg"));
+		viewPane = new TitledPane(Strings.getString("deskpane.icon.title", "Icon:"), view = new ImageView());
 		viewPane.setCollapsible(false);
 		setCenter(viewPane);
 		viewPane.prefHeightProperty().bind(heightProperty());
@@ -96,7 +97,7 @@ public class DeskIconPane extends BorderPane {
 		out.getColumnConstraints().clear();
 		out.getColumnConstraints().addAll(cc, cc);
 		//
-		Button save = new Button(ManagerMain.bundle.getString("deskpane.save.text"), new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/save.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
+		Button save = new Button(Strings.getString("deskpane.save.text", "Save Desktop Icon"), new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/save.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -111,11 +112,11 @@ public class DeskIconPane extends BorderPane {
 		save.prefWidthProperty().bind(out.widthProperty());
 		out.add(save, 0, 0);
 		//
-		Button delete = new Button(ManagerMain.bundle.getString("deskpane.del.text"), new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/delete.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
+		Button delete = new Button(Strings.getString("deskpane.del.text", "Remove Desktop Icon"), new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/delete.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
 		delete.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Alert alert = new Alert(AlertType.CONFIRMATION, ManagerMain.bundle.getString("deskpane.del.question"), ButtonType.YES, ButtonType.NO);
+				Alert alert = new Alert(AlertType.CONFIRMATION, Strings.getString("deskpane.del.question", "Are you sure you want to remove this Icon File?\\nThis action can't be undone."), ButtonType.YES, ButtonType.NO);
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result != null && result.isPresent() && result.get() == ButtonType.YES) {
 					boolean done = false;
@@ -156,7 +157,7 @@ public class DeskIconPane extends BorderPane {
 		out.getColumnConstraints().add(cc1);
 		out.getColumnConstraints().add(cc2);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.caption")), 0, 0);
+		out.add(new Label(Strings.getString("deskpane.icon.caption", "Desktop Icon Name:")), 0, 0);
 		//
 		TextField caption = new TextField(ico.getCaption());
 		caption.textProperty().addListener(new ChangeListener<String>() {
@@ -171,7 +172,7 @@ public class DeskIconPane extends BorderPane {
 		});
 		out.add(caption, 1, 0);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.tooltip")), 0, 1);
+		out.add(new Label(Strings.getString("deskpane.icon.tooltip", "Desktop Icon Tooltip/Description:")), 0, 1);
 		//
 		TextField tooltipCaption = new TextField(ico.getTooltipCaption());
 		tooltipCaption.textProperty().addListener(new ChangeListener<String>() {
@@ -182,7 +183,7 @@ public class DeskIconPane extends BorderPane {
 		});
 		out.add(tooltipCaption, 1, 1);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.command0")), 0, 2);
+		out.add(new Label(Strings.getString("deskpane.icon.command0", "Primary Command:")), 0, 2);
 		//
 		TextField cmd0 = new TextField();
 		if (ico.getCommands() != null && ico.getCommands().length >= 1)
@@ -197,7 +198,7 @@ public class DeskIconPane extends BorderPane {
 		});
 		out.add(cmd0, 1, 2);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.command1")), 0, 3);
+		out.add(new Label(Strings.getString("deskpane.icon.command1", "Secondary Command:")), 0, 3);
 		//
 		TextField cmd1 = new TextField();
 		if (ico.getCommands() != null && ico.getCommands().length >= 2)
@@ -224,7 +225,7 @@ public class DeskIconPane extends BorderPane {
 		GridPane out = new GridPane();
 		out.setPadding(new Insets(10));
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.x")), 0, 0);
+		out.add(new Label(Strings.getString("deskpane.icon.x", "X Position:")), 0, 0);
 		//
 		Spinner<Integer> spX = new Spinner<Integer>(-1, 2048, ico.getX() != null ? ico.getX() : 0);
 		spX.setEditable(true);
@@ -239,7 +240,7 @@ public class DeskIconPane extends BorderPane {
 		});
 		out.add(spX, 1, 0);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.y")), 0, 1);
+		out.add(new Label(Strings.getString("deskpane.icon.y", "Y Position:")), 0, 1);
 		//
 		Spinner<Integer> spY = new Spinner<Integer>(-1, 2048, ico.getY() != null ? ico.getY() : 0);
 		spY.setEditable(true);
@@ -254,7 +255,7 @@ public class DeskIconPane extends BorderPane {
 		});
 		out.add(spY, 1, 1);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.width")), 0, 2);
+		out.add(new Label(Strings.getString("deskpane.icon.width", "Icon Width:")), 0, 2);
 		//
 		Spinner<Integer> spW = new Spinner<Integer>(-1, 2048, ico.getWidth() != null ? ico.getWidth() : 0);
 		spW.setEditable(true);
@@ -270,7 +271,7 @@ public class DeskIconPane extends BorderPane {
 		});
 		out.add(spW, 1, 2);
 		//
-		out.add(new Label(ManagerMain.bundle.getString("deskpane.icon.height")), 0, 3);
+		out.add(new Label(Strings.getString("deskpane.icon.height", "Icon Height:")), 0, 3);
 		//
 		Spinner<Integer> spH = new Spinner<Integer>(-1, 2048, ico.getHeight() != null ? ico.getHeight() : 0);
 		spH.setEditable(true);

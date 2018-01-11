@@ -16,6 +16,7 @@ import es.asfhy.idesk.manager.fxui.controls.PreviewPane;
 import es.asfhy.idesk.manager.fxui.utils.FontConfig;
 import es.asfhy.idesk.manager.objects.DesktopIcon;
 import es.asfhy.idesk.manager.objects.MainConfigFile;
+import es.asfhy.idesk.manager.rsrc.langs.Strings;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,8 +59,8 @@ import javafx.stage.Stage;
 public class ManagerMainFX extends Application {
 	public MainConfigFile					cfg;
 	public final LinkedList<DesktopIcon>	icons			= new LinkedList<DesktopIcon>();
-	private Label							deskFntCol		= new Label(ManagerMain.bundle.getString("main.desktop.preview"));
-	private Label							toolFntCol		= new Label(ManagerMain.bundle.getString("main.tooltip.preview"));
+	private Label							deskFntCol		= new Label(Strings.getString("main.desktop.preview", "Desktop Icons Font Preview"));
+	private Label							toolFntCol		= new Label(Strings.getString("main.tooltip.preview", "Tooltip Font Preview"));
 	private final TabPane					tabs			= new TabPane();
 	public PreviewPane						preview;
 	private final DirectoryChooser			sourceChooser	= new DirectoryChooser();
@@ -90,17 +91,17 @@ public class ManagerMainFX extends Application {
 		Scene scene = new Scene(root, 1024, 768);
 		//
 		preview = new PreviewPane(this);
-		Tab tab0 = new Tab(ManagerMain.bundle.getString("main.tabs.preview"), preview);
+		Tab tab0 = new Tab(Strings.getString("main.tabs.preview", "Desktop Preview"), preview);
 		tab0.setClosable(false);
 		root.widthProperty().addListener(preview.updateSize);
 		root.heightProperty().addListener(preview.updateSize);
 		tabs.getTabs().add(tab0);
 		//
-		Tab tab1 = new Tab(ManagerMain.bundle.getString("main.tabs.config"), createDeskPanel());
+		Tab tab1 = new Tab(Strings.getString("main.tabs.config", "General Settings"), createDeskPanel());
 		tab1.setClosable(false);
 		tabs.getTabs().add(tab1);
 		//
-		Tab tab2 = new Tab(ManagerMain.bundle.getString("main.tabs.actions"));
+		Tab tab2 = new Tab(Strings.getString("main.tabs.actions", "Actions Settings"));
 		tab2.setClosable(false);
 		tabs.getTabs().add(tab2);
 		//
@@ -116,7 +117,7 @@ public class ManagerMainFX extends Application {
 		updateDeskFntCol();
 		updateToolFntCol();
 		//
-		stage.setTitle(ManagerMain.bundle.getString("main.title"));
+		stage.setTitle("iDesk Manager v0.1");
 		//
 		stage.setScene(scene);
 		stage.show();
@@ -136,10 +137,10 @@ public class ManagerMainFX extends Application {
 	private Node createSnapgridPanel() {
 		VBox content = new VBox(3);
 		content.setFillWidth(true);
-		TitledPane out = new TitledPane(ManagerMain.bundle.getString("main.groups.grid"), content);
+		TitledPane out = new TitledPane(Strings.getString("main.groups.grid", "Desktop Icon Snap Grid:"), content);
 		out.setExpanded(false);
 		//
-		CheckBox gridEnabled = new CheckBox(ManagerMain.bundle.getString("main.grid.iconSnap"));
+		CheckBox gridEnabled = new CheckBox(Strings.getString("main.grid.iconSnap", "Enable Desktop Icon Snapping to Desktop Grid."));
 		gridEnabled.setSelected(cfg.getConfigTable().isIconSnap());
 		gridEnabled.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -157,7 +158,7 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setSnapOrigin(snapOrigin.getValue());
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.grid.snapSource")), snapOrigin));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapSource", "Grid Cell Table Origin:")), snapOrigin));
 		//
 		Spinner<Integer> snapWidth = new Spinner<Integer>(1, 1000, cfg.getConfigTable().getSnapWidth());
 		snapWidth.valueProperty().addListener(new ChangeListener<Integer>() {
@@ -166,7 +167,7 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setSnapWidth(new_val);
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.grid.snapWidth")), snapWidth));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapWidth", "Grid Cell Width:")), snapWidth));
 		//
 		Spinner<Integer> snapHeight = new Spinner<Integer>(1, 1000, cfg.getConfigTable().getSnapHeight());
 		snapHeight.valueProperty().addListener(new ChangeListener<Integer>() {
@@ -175,9 +176,9 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setSnapHeight(new_val);
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.grid.snapHeight")), snapHeight));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapHeight", "Grid Cell Height:")), snapHeight));
 		//
-		CheckBox gridShadow = new CheckBox(ManagerMain.bundle.getString("main.grid.snapShadow"));
+		CheckBox gridShadow = new CheckBox(Strings.getString("main.grid.snapShadow", "Show Icon Destination Shadow While Moving."));
 		gridShadow.setSelected(cfg.getConfigTable().isSnapShadow());
 		gridShadow.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -194,17 +195,17 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setSnapShadowTrans(new_val);
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.grid.snapShadowTrans")), snapShadowTrans));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapShadowTrans", "Icon Shadow Transparency:")), snapShadowTrans));
 		//
 		return out;
 	}
 	
 	private Node createDesktopPanel() {
 		VBox content = new VBox(3);
-		TitledPane out = new TitledPane(ManagerMain.bundle.getString("main.groups.desktop"), content);
+		TitledPane out = new TitledPane(Strings.getString("main.groups.desktop", "Desktop Icons:"), content);
 		out.setExpanded(false);
 		//
-		CheckBox lock = new CheckBox(ManagerMain.bundle.getString("main.desktop.locked"));
+		CheckBox lock = new CheckBox(Strings.getString("main.desktop.locked", "Desktop Lock (Disallow Icon Movement)."));
 		lock.setSelected(cfg.getConfigTable().isLocked());
 		lock.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -222,7 +223,7 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setCursorOver(cursorOver.getValue());
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.desktop.cursor")), cursorOver));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.cursor", "Mouse Cursor Over Desktop Icons:")), cursorOver));
 		//
 		ComboBox<FillStyle> fillStyle = new ComboBox<FillStyle>(FXCollections.observableArrayList(FillStyle.values()));
 		fillStyle.setValue(cfg.getConfigTable().getFillStyle());
@@ -232,7 +233,7 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setFillStyle(fillStyle.getValue());
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.desktop.fill")), fillStyle));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.fill", "Icon Fill Effect (While Active):")), fillStyle));
 		//
 		Spinner<Integer> delay = new Spinner<Integer>(50, 1000, cfg.getConfigTable().getClickDelay());
 		delay.valueProperty().addListener(new ChangeListener<Integer>() {
@@ -240,9 +241,9 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setClickDelay(new_val);
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.desktop.delay")), delay));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.delay", "Milliseconds to Consider Double Click:")), delay));
 		//
-		CheckBox captionOnHover = new CheckBox(ManagerMain.bundle.getString("main.desktop.captionOnHover"));
+		CheckBox captionOnHover = new CheckBox(Strings.getString("main.desktop.captionOnHover", "Show Caption Only on Mouse Over Icon."));
 		captionOnHover.setSelected(cfg.getConfigTable().isCaptionOnHover());
 		captionOnHover.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -262,7 +263,7 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.desktop.captionPos")), captionPlacement));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.captionPos", "Location for Icon Text/Caption:")), captionPlacement));
 		//
 		Spinner<Integer> transparency = new Spinner<Integer>(0, 255, cfg.getConfigTable().getTransparency());
 		transparency.valueProperty().addListener(new ChangeListener<Integer>() {
@@ -272,9 +273,9 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.desktop.transparency")), transparency));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.transparency", "Transparency of Desktop Icons:")), transparency));
 		//
-		CheckBox bold = new CheckBox(ManagerMain.bundle.getString("main.desktop.bold"));
+		CheckBox bold = new CheckBox(Strings.getString("main.desktop.bold", "Use Bold Font."));
 		bold.setSelected(cfg.getConfigTable().isFontBold());
 		bold.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -286,7 +287,7 @@ public class ManagerMainFX extends Application {
 		});
 		content.getChildren().add(bold);
 		//
-		deskFntCol.setTooltip(new Tooltip(ManagerMain.bundle.getString("main.desktop.preview.tooltip")));
+		deskFntCol.setTooltip(new Tooltip(Strings.getString("main.desktop.preview.tooltip", "Click to Change Desktop Background Color and Icon Font.")));
 		deskFntCol.getTooltip().setFont(Font.getDefault());
 		deskFntCol.setPadding(new Insets(5));
 		deskFntCol.setAlignment(Pos.CENTER);
@@ -294,7 +295,7 @@ public class ManagerMainFX extends Application {
 			@Override
 			public void handle(MouseEvent evt) {
 				if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 1) {
-					Optional<FontConfig> result = new FontSelectorFX(ManagerMain.bundle.getString("fontsel.caption.desktop"), cfg.getConfigTable().getFontName(), cfg.getConfigTable().isFontBold(), cfg.getConfigTable().getFontSize(), cfg.getConfigTable().getFontColor(), cfg.getConfigTable().getBackgroundColor()).showAndWait();
+					Optional<FontConfig> result = new FontSelectorFX(Strings.getString("fontsel.caption.desktop", "Desktop Font and Background Color Settings:"), cfg.getConfigTable().getFontName(), cfg.getConfigTable().isFontBold(), cfg.getConfigTable().getFontSize(), cfg.getConfigTable().getFontColor(), cfg.getConfigTable().getBackgroundColor()).showAndWait();
 					if (result != null && result.isPresent()) {
 						FontConfig val = result.get();
 						cfg.getConfigTable().setFontName(val.getFontName());
@@ -314,10 +315,10 @@ public class ManagerMainFX extends Application {
 	
 	private Node createTooltipsPanel() {
 		VBox content = new VBox(3);
-		TitledPane out = new TitledPane(ManagerMain.bundle.getString("main.groups.tooltip"), content);
+		TitledPane out = new TitledPane(Strings.getString("main.groups.tooltip", "Icon Tooltips:"), content);
 		out.setExpanded(false);
 		//
-		CheckBox tooltips = new CheckBox(ManagerMain.bundle.getString("main.tooltip.enabled"));
+		CheckBox tooltips = new CheckBox(Strings.getString("main.tooltip.enabled", "Show Tooltips on Mouse Over."));
 		tooltips.setSelected(cfg.getConfigTable().isTooltipCaptionOnHover());
 		tooltips.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -335,9 +336,9 @@ public class ManagerMainFX extends Application {
 				cfg.getConfigTable().setTooltipCaptionPlacement(tooltipsPlacement.getValue());
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.tooltip.captionPos")), tooltipsPlacement));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.tooltip.captionPos", "Location for Tooltip:")), tooltipsPlacement));
 		//
-		toolFntCol.setTooltip(new Tooltip(ManagerMain.bundle.getString("main.tooltip.preview.tooltip")));
+		toolFntCol.setTooltip(new Tooltip(Strings.getString("main.tooltip.preview.tooltip", "Click to Change Tooltips Font and Background Color.")));
 		toolFntCol.getTooltip().setFont(Font.getDefault());
 		toolFntCol.setPadding(new Insets(5));
 		toolFntCol.setAlignment(Pos.CENTER);
@@ -345,7 +346,7 @@ public class ManagerMainFX extends Application {
 			@Override
 			public void handle(MouseEvent evt) {
 				if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 1) {
-					Optional<FontConfig> result = new FontSelectorFX(ManagerMain.bundle.getString("fontsel.caption.tooltip"), cfg.getConfigTable().getTooltipFontName(), false, cfg.getConfigTable().getTooltipFontSize(), cfg.getConfigTable().getTooltipForeColor(), cfg.getConfigTable().getTooltipBackColor()).showAndWait();
+					Optional<FontConfig> result = new FontSelectorFX(Strings.getString("fontsel.caption.tooltip", "Tooltip Font and Color Settings:"), cfg.getConfigTable().getTooltipFontName(), false, cfg.getConfigTable().getTooltipFontSize(), cfg.getConfigTable().getTooltipForeColor(), cfg.getConfigTable().getTooltipBackColor()).showAndWait();
 					if (result != null && result.isPresent()) {
 						FontConfig val = result.get();
 						cfg.getConfigTable().setTooltipFontName(val.getFontName());
@@ -366,7 +367,7 @@ public class ManagerMainFX extends Application {
 		ToolBar tb = new ToolBar();
 		//
 		Button save = new Button();
-		save.setTooltip(new Tooltip(ManagerMain.bundle.getString("main.toolbar.save")));
+		save.setTooltip(new Tooltip(Strings.getString("main.toolbar.save", "Save Changes on Settings")));
 		save.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/save.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -383,14 +384,14 @@ public class ManagerMainFX extends Application {
 		tb.getItems().add(new Separator(Orientation.VERTICAL));
 		//
 		Button newDesktopIcon = new Button();
-		newDesktopIcon.setTooltip(new Tooltip(ManagerMain.bundle.getString("main.toolbar.newIcon")));
+		newDesktopIcon.setTooltip(new Tooltip(Strings.getString("main.toolbar.newIcon", "Create a New Desktop Icon")));
 		newDesktopIcon.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/add.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
 		newDesktopIcon.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent evt) {
 				TextInputDialog tiDiag = new TextInputDialog(String.format("desktop-icon-%d.lnk", System.currentTimeMillis()));
-				tiDiag.setTitle(ManagerMain.bundle.getString("main.toolbar.newIcon.dialogCaption"));
-				tiDiag.setHeaderText(ManagerMain.bundle.getString("main.toolbar.newIcon.dialogHeader"));
+				tiDiag.setTitle(Strings.getString("main.toolbar.newIcon.dialogCaption", "New Dektop File Name:"));
+				tiDiag.setHeaderText(Strings.getString("main.toolbar.newIcon.dialogHeader", "Please, insert a file name for the new Desktop Icon:"));
 				Optional<String> result = tiDiag.showAndWait();
 				if (result != null && result.isPresent()) {
 					StringBuilder fn = new StringBuilder(result.get());
@@ -413,12 +414,12 @@ public class ManagerMainFX extends Application {
 	
 	private Node createShadowPanel() {
 		VBox content = new VBox(3);
-		TitledPane out = new TitledPane(ManagerMain.bundle.getString("main.groups.shadow"), content);
+		TitledPane out = new TitledPane(Strings.getString("main.groups.shadow", "Desktop Icons Caption Shadow:"), content);
 		out.setExpanded(false);
 		//
 		content.prefWidthProperty().bind(out.widthProperty());
 		//
-		CheckBox shadowEnabled = new CheckBox(ManagerMain.bundle.getString("main.shadow.enabled"));
+		CheckBox shadowEnabled = new CheckBox(Strings.getString("main.shadow.enabled", "Shadow Enabled."));
 		shadowEnabled.setSelected(cfg.getConfigTable().isUseShadow());
 		shadowEnabled.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -439,7 +440,7 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.shadow.color")), shadowPick));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.shadow.color", "Shadow Color:")), shadowPick));
 		//
 		Spinner<Integer> shadowX = new Spinner<Integer>(-1024, 1024, cfg.getConfigTable().getShadowX());
 		shadowX.valueProperty().addListener(new ChangeListener<Integer>() {
@@ -449,7 +450,7 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.shadow.x")), shadowX));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.shadow.x", "Shadow's X Offset:")), shadowX));
 		//
 		Spinner<Integer> shadowY = new Spinner<Integer>(-1024, 1024, cfg.getConfigTable().getShadowY());
 		shadowY.valueProperty().addListener(new ChangeListener<Integer>() {
@@ -459,14 +460,14 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.shadow.y")), shadowY));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.shadow.y", "Shadow's Y Offset:")), shadowY));
 		//
 		return out;
 	}
 	
 	private Node createBakcgroundPanel() {
 		VBox content = new VBox(3);
-		TitledPane out = new TitledPane(ManagerMain.bundle.getString("main.groups.background"), content);
+		TitledPane out = new TitledPane(Strings.getString("main.groups.background", "Desktop Background:"), content);
 		out.setExpanded(false);
 		//
 		String aux = cfg.getConfigTable().getBackgroundSource();
@@ -478,7 +479,7 @@ public class ManagerMainFX extends Application {
 				sourceChooser.setInitialDirectory(f.getParentFile());
 			}
 		}
-		sourceChooser.setTitle(ManagerMain.bundle.getString("main.background.source.title"));
+		sourceChooser.setTitle(Strings.getString("main.background.source.title", "Choose Folder with Wallpaper Images:"));
 		//
 		aux = cfg.getConfigTable().getBackgroundFile();
 		if (aux != null && aux.trim().length() > 0) {
@@ -488,7 +489,7 @@ public class ManagerMainFX extends Application {
 				fileChooser.setInitialDirectory(f.getParentFile());
 			}
 		}
-		fileChooser.setTitle(ManagerMain.bundle.getString("main.background.file.title"));
+		fileChooser.setTitle(Strings.getString("main.background.file.title", "Choose Image File to use as Wallpaper:"));
 		//
 		Spinner<Integer> delay = new Spinner<Integer>(0, 10000, cfg.getConfigTable().getBackgroundDelay());
 		delay.setEditable(true);
@@ -499,11 +500,11 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.background.delay")), delay));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.background.delay", "Delay, in Minutes, for Background Changing (0 means no changing):")), delay));
 		//
 		TextField source = new TextField(cfg.getConfigTable().getBackgroundSource());
 		source.setEditable(false);
-		source.setTooltip(new Tooltip(ManagerMain.bundle.getString("main.background.source.tooltip")));
+		source.setTooltip(new Tooltip(Strings.getString("main.background.source.tooltip", "Double Click the field to Choose other Folder")));
 		source.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -517,11 +518,11 @@ public class ManagerMainFX extends Application {
 				}
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.background.source")), source));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.background.source", "Source Folder Where to Find Wallpapers:")), source));
 		//
 		TextField file = new TextField(cfg.getConfigTable().getBackgroundFile());
 		file.setEditable(false);
-		file.setTooltip(new Tooltip(ManagerMain.bundle.getString("main.background.file.tooltip")));
+		file.setTooltip(new Tooltip(Strings.getString("main.background.file.tooltip", "Double Click the field to Choose other File")));
 		file.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -535,7 +536,7 @@ public class ManagerMainFX extends Application {
 				}
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.background.file")), file));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.background.file", "iDesk Wallpaper Image (If only one or error with source):")), file));
 		//
 		ComboBox<BackgroundMode> mode = new ComboBox<BackgroundMode>(FXCollections.observableArrayList(BackgroundMode.values()));
 		mode.setValue(cfg.getConfigTable().getBackgroundMode());
@@ -546,7 +547,7 @@ public class ManagerMainFX extends Application {
 				preview.updateView();
 			}
 		});
-		content.getChildren().add(hbox(new Label(ManagerMain.bundle.getString("main.background.mode")), mode));
+		content.getChildren().add(hbox(new Label(Strings.getString("main.background.mode", "Wallpaper Fill Desktop Mode:")), mode));
 		//
 		return out;
 	}

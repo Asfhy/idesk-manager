@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import es.asfhy.idesk.manager.ManagerMain;
 import es.asfhy.idesk.manager.fxui.utils.FontConfig;
+import es.asfhy.idesk.manager.rsrc.langs.Strings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -45,7 +46,7 @@ public class FontSelectorFX extends Dialog<FontConfig> {
 	private final FontConfig	config;
 	private final FontConfig	originalCfg;
 	private final boolean		bold;
-	private final Label			preview	= new Label(ManagerMain.bundle.getString("fontsel.preview"));
+	private final Label			preview	= new Label(Strings.getString("fontsel.preview", "Font and Color Settings Sample"));
 	
 	private synchronized void updatePreview() {
 		preview.setStyle(ManagerMain.getFontStyle(config.getForeColor(), config.getBackColor(), config.getFontName(), config.getFontSize(), bold));
@@ -142,7 +143,7 @@ public class FontSelectorFX extends Dialog<FontConfig> {
 			}
 		});
 		//
-		Button ok = new Button(ManagerMain.bundle.getString("fontsel.accept"));
+		Button ok = new Button(Strings.getString("fontsel.accept", "Accept Changes"));
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent evt) {
@@ -153,7 +154,7 @@ public class FontSelectorFX extends Dialog<FontConfig> {
 		ok.setMaxWidth(Double.POSITIVE_INFINITY);
 		HBox.setHgrow(ok, Priority.ALWAYS);
 		//
-		Button cancel = new Button(ManagerMain.bundle.getString("fontsel.cancel"));
+		Button cancel = new Button(Strings.getString("fontsel.cancel", "Cancel"));
 		cancel.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent evt) {
@@ -166,8 +167,8 @@ public class FontSelectorFX extends Dialog<FontConfig> {
 		//
 		head.getChildren().add(preview);
 		//
-		rows.getChildren().addAll(hbox(ManagerMain.bundle.getString("fontsel.family"), fntName), hbox(ManagerMain.bundle.getString("fontsel.size"), fntSize));
-		rows.getChildren().addAll(hbox(ManagerMain.bundle.getString("fontsel.fore"), fgColPick), hbox(ManagerMain.bundle.getString("fontsel.back"), bgColPick));
+		rows.getChildren().addAll(hbox(Strings.getString("fontsel.family", "Font Family:"), fntName), hbox(Strings.getString("fontsel.size", "Font Size:"), fntSize));
+		rows.getChildren().addAll(hbox(Strings.getString("fontsel.fore", "Text Color:"), fgColPick), hbox(Strings.getString("fontsel.back", "Background Color:"), bgColPick));
 		rows.getChildren().addAll(new Separator(Orientation.HORIZONTAL), ok, cancel);
 		//
 		getDialogPane().setHeader(head);

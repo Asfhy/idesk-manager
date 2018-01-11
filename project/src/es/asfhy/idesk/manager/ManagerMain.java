@@ -9,32 +9,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
 
 import es.asfhy.idesk.manager.fxui.ManagerMainFX;
 import es.asfhy.idesk.manager.objects.MainConfigFile;
+import es.asfhy.idesk.manager.rsrc.langs.Strings;
 import javafx.application.Application;
 
 public class ManagerMain {
-	public static final File			ideskrc		= new File(System.getProperty("user.home"), ".ideskrc");
-	public static final File			ideskFolder	= new File(System.getProperty("user.home"), ".idesktop");
-	public static final double			iconSize	= 1.75 * new Canvas().getFontMetrics(new JLabel().getFont()).getHeight();
-	public static final String			families[]	= GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-	public static final Integer			sizes[]		= new Integer[750];
-	public static final ResourceBundle	bundle;
-	static {
-		ResourceBundle aux = null;
-		try {
-			aux = ResourceBundle.getBundle("es.asfhy.idesk.manager.rsrc.langs.Strings");
-		} catch (Exception e) {
-			aux = ResourceBundle.getBundle("es.asfhy.idesk.manager.rsrc.langs.Strings", new Locale("en", "US"));
-		}
-		bundle = aux;
-		for (int x = 0; x < sizes.length; x++)
-			sizes[x] = x + 4;
-	}
+	public static final File	ideskrc		= new File(System.getProperty("user.home"), ".ideskrc");
+	public static final File	ideskFolder	= new File(System.getProperty("user.home"), ".idesktop");
+	public static final double	iconSize	= 1.75 * new Canvas().getFontMetrics(new JLabel().getFont()).getHeight();
+	public static final String	families[]	= GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+	public static final Integer	sizes[]		= new Integer[750];
 	
 	private static final String format(java.awt.Color color) {
 		return String.format("rgba(%d, %d, %d, %d)", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
@@ -104,7 +92,7 @@ public class ManagerMain {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		Locale.setDefault(bundle.getLocale());
+		Locale.setDefault(Strings.getLocale());
 		Application.launch(ManagerMainFX.class, args);
 	}
 }
