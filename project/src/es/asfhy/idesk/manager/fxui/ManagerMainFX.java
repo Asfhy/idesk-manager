@@ -18,11 +18,9 @@ import es.asfhy.idesk.manager.objects.DesktopIcon;
 import es.asfhy.idesk.manager.objects.MainConfigFile;
 import es.asfhy.idesk.manager.rsrc.langs.Strings;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -142,59 +140,29 @@ public class ManagerMainFX extends Application {
 		//
 		CheckBox gridEnabled = new CheckBox(Strings.getString("main.grid.iconSnap", "Enable Desktop Icon Snapping to Desktop Grid."));
 		gridEnabled.setSelected(cfg.getConfigTable().isIconSnap());
-		gridEnabled.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setIconSnap(gridEnabled.isSelected());
-			}
-		});
+		gridEnabled.setOnAction((ActionEvent arg0) -> cfg.getConfigTable().setIconSnap(gridEnabled.isSelected()));
 		content.getChildren().add(gridEnabled);
 		//
 		ComboBox<SnapOrigin> snapOrigin = new ComboBox<SnapOrigin>(FXCollections.observableArrayList(SnapOrigin.values()));
 		snapOrigin.setValue(cfg.getConfigTable().getSnapOrigin());
-		snapOrigin.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setSnapOrigin(snapOrigin.getValue());
-			}
-		});
+		snapOrigin.setOnAction((ActionEvent arg0) -> cfg.getConfigTable().setSnapOrigin(snapOrigin.getValue()));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapSource", "Grid Cell Table Origin:")), snapOrigin));
 		//
 		Spinner<Integer> snapWidth = new Spinner<Integer>(1, 1000, cfg.getConfigTable().getSnapWidth());
-		snapWidth.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer new_val) {
-				cfg.getConfigTable().setSnapWidth(new_val);
-			}
-		});
+		snapWidth.valueProperty().addListener((ObservableValue<? extends Integer> arg0, Integer arg1, Integer new_val) -> cfg.getConfigTable().setSnapWidth(new_val));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapWidth", "Grid Cell Width:")), snapWidth));
 		//
 		Spinner<Integer> snapHeight = new Spinner<Integer>(1, 1000, cfg.getConfigTable().getSnapHeight());
-		snapHeight.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer new_val) {
-				cfg.getConfigTable().setSnapHeight(new_val);
-			}
-		});
+		snapHeight.valueProperty().addListener((ObservableValue<? extends Integer> arg0, Integer arg1, Integer new_val) -> cfg.getConfigTable().setSnapHeight(new_val));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapHeight", "Grid Cell Height:")), snapHeight));
 		//
 		CheckBox gridShadow = new CheckBox(Strings.getString("main.grid.snapShadow", "Show Icon Destination Shadow While Moving."));
 		gridShadow.setSelected(cfg.getConfigTable().isSnapShadow());
-		gridShadow.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setSnapShadow(gridShadow.isSelected());
-			}
-		});
+		gridShadow.setOnAction((ActionEvent arg0) -> cfg.getConfigTable().setSnapShadow(gridShadow.isSelected()));
 		content.getChildren().add(gridShadow);
 		//
 		Spinner<Integer> snapShadowTrans = new Spinner<Integer>(0, 255, cfg.getConfigTable().getSnapShadowTrans());
-		snapShadowTrans.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer new_val) {
-				cfg.getConfigTable().setSnapShadowTrans(new_val);
-			}
-		});
+		snapShadowTrans.valueProperty().addListener((ObservableValue<? extends Integer> arg0, Integer arg1, Integer new_val) -> cfg.getConfigTable().setSnapShadowTrans(new_val));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.grid.snapShadowTrans", "Icon Shadow Transparency:")), snapShadowTrans));
 		//
 		return out;
@@ -207,83 +175,49 @@ public class ManagerMainFX extends Application {
 		//
 		CheckBox lock = new CheckBox(Strings.getString("main.desktop.locked", "Desktop Lock (Disallow Icon Movement)."));
 		lock.setSelected(cfg.getConfigTable().isLocked());
-		lock.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setLocked(lock.isSelected());
-			}
-		});
+		lock.setOnAction((ActionEvent evt) -> cfg.getConfigTable().setLocked(lock.isSelected()));
 		content.getChildren().add(lock);
 		//
 		ComboBox<CursorOver> cursorOver = new ComboBox<CursorOver>(FXCollections.observableArrayList(CursorOver.values()));
 		cursorOver.setValue(cfg.getConfigTable().getCursorOver());
-		cursorOver.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setCursorOver(cursorOver.getValue());
-			}
-		});
+		cursorOver.setOnAction((ActionEvent evt) -> cfg.getConfigTable().setCursorOver(cursorOver.getValue()));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.cursor", "Mouse Cursor Over Desktop Icons:")), cursorOver));
 		//
 		ComboBox<FillStyle> fillStyle = new ComboBox<FillStyle>(FXCollections.observableArrayList(FillStyle.values()));
 		fillStyle.setValue(cfg.getConfigTable().getFillStyle());
-		fillStyle.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setFillStyle(fillStyle.getValue());
-			}
-		});
+		fillStyle.setOnAction((ActionEvent evt) -> cfg.getConfigTable().setFillStyle(fillStyle.getValue()));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.fill", "Icon Fill Effect (While Active):")), fillStyle));
 		//
 		Spinner<Integer> delay = new Spinner<Integer>(50, 1000, cfg.getConfigTable().getClickDelay());
-		delay.valueProperty().addListener(new ChangeListener<Integer>() {
-			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
-				cfg.getConfigTable().setClickDelay(new_val);
-			}
-		});
+		delay.valueProperty().addListener((ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) -> cfg.getConfigTable().setClickDelay(new_val));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.delay", "Milliseconds to Consider Double Click:")), delay));
 		//
 		CheckBox captionOnHover = new CheckBox(Strings.getString("main.desktop.captionOnHover", "Show Caption Only on Mouse Over Icon."));
 		captionOnHover.setSelected(cfg.getConfigTable().isCaptionOnHover());
-		captionOnHover.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setCaptionOnHover(captionOnHover.isSelected());
-				preview.updateView();
-			}
-		});
+		captionOnHover.setOnAction((ActionEvent evt) -> cfg.getConfigTable().setCaptionOnHover(captionOnHover.isSelected()));
 		content.getChildren().add(captionOnHover);
 		//
 		ComboBox<Placement> captionPlacement = new ComboBox<Placement>(FXCollections.observableArrayList(Placement.values()));
 		captionPlacement.setValue(cfg.getConfigTable().getCaptionPlacement());
-		captionPlacement.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setCaptionPlacement(captionPlacement.getValue());
-				preview.updateView();
-			}
+		captionPlacement.setOnAction((ActionEvent evt) -> {
+			cfg.getConfigTable().setCaptionPlacement(captionPlacement.getValue());
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.captionPos", "Location for Icon Text/Caption:")), captionPlacement));
 		//
 		Spinner<Integer> transparency = new Spinner<Integer>(0, 255, cfg.getConfigTable().getTransparency());
-		transparency.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
-				cfg.getConfigTable().setTransparency(new_val);
-				preview.updateView();
-			}
+		transparency.valueProperty().addListener((ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) -> {
+			cfg.getConfigTable().setTransparency(new_val);
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.desktop.transparency", "Transparency of Desktop Icons:")), transparency));
 		//
 		CheckBox bold = new CheckBox(Strings.getString("main.desktop.bold", "Use Bold Font."));
 		bold.setSelected(cfg.getConfigTable().isFontBold());
-		bold.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setFontBold(bold.isSelected());
-				updateDeskFntCol();
-				preview.updateView();
-			}
+		bold.setOnAction((ActionEvent evt) -> {
+			cfg.getConfigTable().setFontBold(bold.isSelected());
+			updateDeskFntCol();
+			preview.updateView();
 		});
 		content.getChildren().add(bold);
 		//
@@ -291,20 +225,17 @@ public class ManagerMainFX extends Application {
 		deskFntCol.getTooltip().setFont(Font.getDefault());
 		deskFntCol.setPadding(new Insets(5));
 		deskFntCol.setAlignment(Pos.CENTER);
-		deskFntCol.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent evt) {
-				if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 1) {
-					Optional<FontConfig> result = new FontSelectorFX(Strings.getString("fontsel.caption.desktop", "Desktop Font and Background Color Settings:"), cfg.getConfigTable().getFontName(), cfg.getConfigTable().isFontBold(), cfg.getConfigTable().getFontSize(), cfg.getConfigTable().getFontColor(), cfg.getConfigTable().getBackgroundColor()).showAndWait();
-					if (result != null && result.isPresent()) {
-						FontConfig val = result.get();
-						cfg.getConfigTable().setFontName(val.getFontName());
-						cfg.getConfigTable().setFontSize((int) Math.round(val.getFontSize()));
-						cfg.getConfigTable().setBackgroundColor(val.getBackColor());
-						cfg.getConfigTable().setFontColor(val.getForeColor());
-						updateDeskFntCol();
-						preview.updateView();
-					}
+		deskFntCol.setOnMouseClicked((MouseEvent evt) -> {
+			if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 1) {
+				Optional<FontConfig> result = new FontSelectorFX(Strings.getString("fontsel.caption.desktop", "Desktop Font and Background Color Settings:"), cfg.getConfigTable().getFontName(), cfg.getConfigTable().isFontBold(), cfg.getConfigTable().getFontSize(), cfg.getConfigTable().getFontColor(), cfg.getConfigTable().getBackgroundColor()).showAndWait();
+				if (result != null && result.isPresent()) {
+					FontConfig val = result.get();
+					cfg.getConfigTable().setFontName(val.getFontName());
+					cfg.getConfigTable().setFontSize((int) Math.round(val.getFontSize()));
+					cfg.getConfigTable().setBackgroundColor(val.getBackColor());
+					cfg.getConfigTable().setFontColor(val.getForeColor());
+					updateDeskFntCol();
+					preview.updateView();
 				}
 			}
 		});
@@ -320,41 +251,28 @@ public class ManagerMainFX extends Application {
 		//
 		CheckBox tooltips = new CheckBox(Strings.getString("main.tooltip.enabled", "Show Tooltips on Mouse Over."));
 		tooltips.setSelected(cfg.getConfigTable().isTooltipCaptionOnHover());
-		tooltips.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setTooltipCaptionOnHover(tooltips.isSelected());
-			}
-		});
+		tooltips.setOnAction((ActionEvent arg0) -> cfg.getConfigTable().setTooltipCaptionOnHover(tooltips.isSelected()));
 		content.getChildren().add(tooltips);
 		//
 		ComboBox<Placement> tooltipsPlacement = new ComboBox<Placement>(FXCollections.observableArrayList(Placement.values()));
 		tooltipsPlacement.setValue(cfg.getConfigTable().getTooltipCaptionPlacement());
-		tooltipsPlacement.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setTooltipCaptionPlacement(tooltipsPlacement.getValue());
-			}
-		});
+		tooltipsPlacement.setOnAction((ActionEvent arg0) -> cfg.getConfigTable().setTooltipCaptionPlacement(tooltipsPlacement.getValue()));
 		content.getChildren().add(hbox(new Label(Strings.getString("main.tooltip.captionPos", "Location for Tooltip:")), tooltipsPlacement));
 		//
 		toolFntCol.setTooltip(new Tooltip(Strings.getString("main.tooltip.preview.tooltip", "Click to Change Tooltips Font and Background Color.")));
 		toolFntCol.getTooltip().setFont(Font.getDefault());
 		toolFntCol.setPadding(new Insets(5));
 		toolFntCol.setAlignment(Pos.CENTER);
-		toolFntCol.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent evt) {
-				if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 1) {
-					Optional<FontConfig> result = new FontSelectorFX(Strings.getString("fontsel.caption.tooltip", "Tooltip Font and Color Settings:"), cfg.getConfigTable().getTooltipFontName(), false, cfg.getConfigTable().getTooltipFontSize(), cfg.getConfigTable().getTooltipForeColor(), cfg.getConfigTable().getTooltipBackColor()).showAndWait();
-					if (result != null && result.isPresent()) {
-						FontConfig val = result.get();
-						cfg.getConfigTable().setTooltipFontName(val.getFontName());
-						cfg.getConfigTable().setTooltipFontSize((int) Math.round(val.getFontSize()));
-						cfg.getConfigTable().setTooltipBackColor(val.getBackColor());
-						cfg.getConfigTable().setTooltipForeColor(val.getForeColor());
-						updateToolFntCol();
-					}
+		toolFntCol.setOnMouseClicked((MouseEvent evt) -> {
+			if (evt.getButton() == MouseButton.PRIMARY && evt.getClickCount() == 1) {
+				Optional<FontConfig> result = new FontSelectorFX(Strings.getString("fontsel.caption.tooltip", "Tooltip Font and Color Settings:"), cfg.getConfigTable().getTooltipFontName(), false, cfg.getConfigTable().getTooltipFontSize(), cfg.getConfigTable().getTooltipForeColor(), cfg.getConfigTable().getTooltipBackColor()).showAndWait();
+				if (result != null && result.isPresent()) {
+					FontConfig val = result.get();
+					cfg.getConfigTable().setTooltipFontName(val.getFontName());
+					cfg.getConfigTable().setTooltipFontSize((int) Math.round(val.getFontSize()));
+					cfg.getConfigTable().setTooltipBackColor(val.getBackColor());
+					cfg.getConfigTable().setTooltipForeColor(val.getForeColor());
+					updateToolFntCol();
 				}
 			}
 		});
@@ -369,14 +287,11 @@ public class ManagerMainFX extends Application {
 		Button save = new Button();
 		save.setTooltip(new Tooltip(Strings.getString("main.toolbar.save", "Save Changes on Settings")));
 		save.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/save.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
-		save.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				try {
-					cfg.save();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		save.setOnAction((ActionEvent arg0) -> {
+			try {
+				cfg.save();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 		tb.getItems().add(save);
@@ -386,25 +301,22 @@ public class ManagerMainFX extends Application {
 		Button newDesktopIcon = new Button();
 		newDesktopIcon.setTooltip(new Tooltip(Strings.getString("main.toolbar.newIcon", "Create a New Desktop Icon")));
 		newDesktopIcon.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/es/asfhy/idesk/manager/rsrc/add.png"), ManagerMain.iconSize, ManagerMain.iconSize, true, true)));
-		newDesktopIcon.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent evt) {
-				TextInputDialog tiDiag = new TextInputDialog(String.format("desktop-icon-%d.lnk", System.currentTimeMillis()));
-				tiDiag.setTitle(Strings.getString("main.toolbar.newIcon.dialogCaption", "New Dektop File Name:"));
-				tiDiag.setHeaderText(Strings.getString("main.toolbar.newIcon.dialogHeader", "Please, insert a file name for the new Desktop Icon:"));
-				Optional<String> result = tiDiag.showAndWait();
-				if (result != null && result.isPresent()) {
-					StringBuilder fn = new StringBuilder(result.get());
-					if (!fn.toString().toLowerCase().endsWith(".lnk"))
-						fn.append(".lnk");
-					Tab tab = new Tab(fn.toString());
-					tab.setClosable(false);
-					DeskIconPane dip = new DeskIconPane(ManagerMainFX.this, tab, fn.toString());
-					tab.setContent(dip);
-					icons.add(dip.getIcon());
-					tabs.getTabs().add(tab);
-					tabs.getSelectionModel().select(tab);
-				}
+		newDesktopIcon.setOnAction((ActionEvent evt) -> {
+			TextInputDialog tiDiag = new TextInputDialog(String.format("desktop-icon-%d.lnk", System.currentTimeMillis()));
+			tiDiag.setTitle(Strings.getString("main.toolbar.newIcon.dialogCaption", "New Dektop File Name:"));
+			tiDiag.setHeaderText(Strings.getString("main.toolbar.newIcon.dialogHeader", "Please, insert a file name for the new Desktop Icon:"));
+			Optional<String> result = tiDiag.showAndWait();
+			if (result != null && result.isPresent()) {
+				StringBuilder fn = new StringBuilder(result.get());
+				if (!fn.toString().toLowerCase().endsWith(".lnk"))
+					fn.append(".lnk");
+				Tab tab = new Tab(fn.toString());
+				tab.setClosable(false);
+				DeskIconPane dip = new DeskIconPane(ManagerMainFX.this, tab, fn.toString());
+				tab.setContent(dip);
+				icons.add(dip.getIcon());
+				tabs.getTabs().add(tab);
+				tabs.getSelectionModel().select(tab);
 			}
 		});
 		tb.getItems().add(newDesktopIcon);
@@ -421,44 +333,32 @@ public class ManagerMainFX extends Application {
 		//
 		CheckBox shadowEnabled = new CheckBox(Strings.getString("main.shadow.enabled", "Shadow Enabled."));
 		shadowEnabled.setSelected(cfg.getConfigTable().isUseShadow());
-		shadowEnabled.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setUseShadow(shadowEnabled.isSelected());
-				preview.updateView();
-			}
+		shadowEnabled.setOnAction((ActionEvent arg0) -> {
+			cfg.getConfigTable().setUseShadow(shadowEnabled.isSelected());
+			preview.updateView();
 		});
 		content.getChildren().add(shadowEnabled);
 		//
 		ColorPicker shadowPick = new ColorPicker(ManagerMain.cast(cfg.getConfigTable().getShadowColor()));
 		shadowPick.getStyleClass().add("button");
 		shadowPick.setStyle("-fx-color-rect-width: 1.5em; -fx-color-rect-height: 1.5em;-fx-min-height: 2.25em;");
-		shadowPick.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setShadowColor(ManagerMain.cast(shadowPick.getValue()));
-				preview.updateView();
-			}
+		shadowPick.setOnAction((ActionEvent arg0) -> {
+			cfg.getConfigTable().setShadowColor(ManagerMain.cast(shadowPick.getValue()));
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.shadow.color", "Shadow Color:")), shadowPick));
 		//
 		Spinner<Integer> shadowX = new Spinner<Integer>(-1024, 1024, cfg.getConfigTable().getShadowX());
-		shadowX.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
-				cfg.getConfigTable().setShadowX(new_val);
-				preview.updateView();
-			}
+		shadowX.valueProperty().addListener((ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) -> {
+			cfg.getConfigTable().setShadowX(new_val);
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.shadow.x", "Shadow's X Offset:")), shadowX));
 		//
 		Spinner<Integer> shadowY = new Spinner<Integer>(-1024, 1024, cfg.getConfigTable().getShadowY());
-		shadowY.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
-				cfg.getConfigTable().setShadowY(new_val);
-				preview.updateView();
-			}
+		shadowY.valueProperty().addListener((ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) -> {
+			cfg.getConfigTable().setShadowY(new_val);
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.shadow.y", "Shadow's Y Offset:")), shadowY));
 		//
@@ -493,28 +393,22 @@ public class ManagerMainFX extends Application {
 		//
 		Spinner<Integer> delay = new Spinner<Integer>(0, 10000, cfg.getConfigTable().getBackgroundDelay());
 		delay.setEditable(true);
-		delay.valueProperty().addListener(new ChangeListener<Integer>() {
-			@Override
-			public void changed(ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) {
-				cfg.getConfigTable().setBackgroundDelay(new_val);
-				preview.updateView();
-			}
+		delay.valueProperty().addListener((ObservableValue<? extends Integer> val, Integer old_val, Integer new_val) -> {
+			cfg.getConfigTable().setBackgroundDelay(new_val);
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.background.delay", "Delay, in Minutes, for Background Changing (0 means no changing):")), delay));
 		//
 		TextField source = new TextField(cfg.getConfigTable().getBackgroundSource());
 		source.setEditable(false);
 		source.setTooltip(new Tooltip(Strings.getString("main.background.source.tooltip", "Double Click the field to Choose other Folder")));
-		source.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent arg0) {
-				if (arg0.getButton() == MouseButton.PRIMARY && arg0.getClickCount() == 2) {
-					File aux = sourceChooser.showDialog(deskFntCol.getScene().getWindow());
-					if (aux != null) {
-						cfg.getConfigTable().setBackgroundSource(aux.getAbsolutePath());
-						source.setText(aux.getAbsolutePath());
-						preview.updateView();
-					}
+		source.setOnMouseClicked((MouseEvent arg0) -> {
+			if (arg0.getButton() == MouseButton.PRIMARY && arg0.getClickCount() == 2) {
+				File evtAux = sourceChooser.showDialog(deskFntCol.getScene().getWindow());
+				if (evtAux != null) {
+					cfg.getConfigTable().setBackgroundSource(evtAux.getAbsolutePath());
+					source.setText(evtAux.getAbsolutePath());
+					preview.updateView();
 				}
 			}
 		});
@@ -523,16 +417,13 @@ public class ManagerMainFX extends Application {
 		TextField file = new TextField(cfg.getConfigTable().getBackgroundFile());
 		file.setEditable(false);
 		file.setTooltip(new Tooltip(Strings.getString("main.background.file.tooltip", "Double Click the field to Choose other File")));
-		file.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent arg0) {
-				if (arg0.getButton() == MouseButton.PRIMARY && arg0.getClickCount() == 2) {
-					File aux = fileChooser.showOpenDialog(deskFntCol.getScene().getWindow());
-					if (aux != null) {
-						cfg.getConfigTable().setBackgroundFile(aux.getAbsolutePath());
-						file.setText(aux.getAbsolutePath());
-						preview.updateView();
-					}
+		file.setOnMouseClicked((MouseEvent arg0) -> {
+			if (arg0.getButton() == MouseButton.PRIMARY && arg0.getClickCount() == 2) {
+				File evtAux = fileChooser.showOpenDialog(deskFntCol.getScene().getWindow());
+				if (evtAux != null) {
+					cfg.getConfigTable().setBackgroundFile(evtAux.getAbsolutePath());
+					file.setText(evtAux.getAbsolutePath());
+					preview.updateView();
 				}
 			}
 		});
@@ -540,12 +431,9 @@ public class ManagerMainFX extends Application {
 		//
 		ComboBox<BackgroundMode> mode = new ComboBox<BackgroundMode>(FXCollections.observableArrayList(BackgroundMode.values()));
 		mode.setValue(cfg.getConfigTable().getBackgroundMode());
-		mode.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				cfg.getConfigTable().setBackgroundMode(mode.getValue());
-				preview.updateView();
-			}
+		mode.setOnAction((ActionEvent arg0) -> {
+			cfg.getConfigTable().setBackgroundMode(mode.getValue());
+			preview.updateView();
 		});
 		content.getChildren().add(hbox(new Label(Strings.getString("main.background.mode", "Wallpaper Fill Desktop Mode:")), mode));
 		//
